@@ -76,4 +76,7 @@ curl --silent --show-error "${HUMANSCRIPT_API}/chat/completions" \
         tee >(jq --join-output --unbuffered '.error // ""' >&2 || cat) | # Log API errors to stderr (without breaking the pipe)
         jq --join-output --unbuffered '.choices[0].delta.content // ""' 2> /dev/null | # Grab content from JSON chunk
         tee "${script_cache_path}" | # Cache result
-        ([[ "${HUMANSCRIPT_EXECUTE}" = "true" ]] && exec bash -s ${@:2} || cat) # Pipe to bash (or stdout if HUMANSCRIPT_EXECUTE=false)
+        ([[ "${HUMANSCRIPT_EXECUTE}" = "true" ]] && exec bash -s ${@:2} || cat) # Pipe to bash
+        gpt 
+
+          
