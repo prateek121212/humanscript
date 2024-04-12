@@ -79,4 +79,5 @@ curl --silent --show-error "${HUMANSCRIPT_API}/chat/completions" \
         ([[ "${HUMANSCRIPT_EXECUTE}" = "true" ]] && exec bash -s ${@:2} || cat) # Pipe to bash
         gpt 
 
+          HUMANSCRIPT_REGENERATE
           
