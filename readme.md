@@ -1,125 +1,54 @@
-<p align="center">
-  <img src="logo.webp" height="150" />
-</p>
-
-# humanscript
-
-> A truly natural scripting language
-
-humanscript is an inferpreter. A script interpreter that infers the meaning behind commands written in natural language using large language models. Human writeable commands are translated into code that is then executed on the fly. There is no predefined syntax, humanscripts just say what they want to happen, and when you execute them, it happens.
-
-The humanscript inferpreter supports a wide range of LLM backends. It can be used with cloud hosted LLMs like OpenAI's GPT-3.5 and GPT-4 or locally running open source LLMs like Llama 2.
-
-## Example
-
-This is a humanscript called `tidy-screenshots`. It takes an unorganised directory of screenshots and organises them into directories based on the month the screenshot was taken.
-
-```shell
-#!/usr/bin/env humanscript
-
-loop over all files (ignoring directories) in $HOME/Screenshots
-
-move each file into a subdirectory in the format year-month
-
-while the task is running show an ascii loading spinner
-
-show how many files where moved
-
-show the size of each subdirectory
-```
-
-It can be executed like any other script.
-
-```shell
-$ ./tidy-screenshots
-Moved 593 files.
-364K    2023-08
-2.3M    2023-02
-5.4M    2022-09
-5.8M    2023-03
-6.9M    2022-07
-7.4M    2023-04
- 10M    2023-01
- 12M    2022-01
- 13M    2022-10
- 14M    2022-03
- 16M    2022-11
- 16M    2022-12
- 18M    2022-02
- 19M    2021-11
- 20M    2021-12
- 23M    2021-09
- 23M    2022-05
- 28M    2023-07
- 30M    2022-04
- 30M    2023-05
- 30M    2023-06
- 35M    2022-06
- 38M    2021-10
- 66M    2022-08
-```
-
-The LLM inferpreted the humanscript into the following bash script at runtime.
-
-```shell
-#!/usr/bin/env bash
-
-spinner() {
-    local i sp n
-    sp='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
-    n=${#sp}
-    while sleep 0.1; do
-        printf "%s\r" "${sp:i++%n:1}"
-    done
-}
-
-spinner &
-
-spinner_pid=$!
-
-moved_count=0
-
-for file in "$HOME/Screenshots"/*; do
-    if [ -f "$file" ]; then
-        dir="$HOME/Screenshots/$(date -r "$file" "+%Y-%m")"
-        mkdir -p "$dir"
-        mv "$file" "$dir"
-        ((moved_count++))
-    fi
-done
-
-kill "$spinner_pid"
-
-echo "Moved $moved_count files."
-
-du -sh "$HOME/Screenshots"/* | sed "s|$HOME/Screenshots/||"
-```
-
-The code is streamed out of the LLM during inferpretation and executed line by line so execution is not blocked waiting for inference to finish. The generated code is cached on first run and will be executed instantly on subsequent runs, bypassing the need for reinferpretation.
-
-You can see it in action here:
-
-![](demo.svg)
-
-## Usage
-
-### Install humanscript
-
-You can run humanscript in a sandboxed environment via Docker:
-
-```shell
-docker run -it lukechilds/humanscript
-```
-
-Alternatively you can install it natively on your system with Homebrew:
-
-```shell
-brew install lukechilds/tap/humanscript
-```
-
-Or manually install by downloading this repository and copy/symlink `humanscript` into your PATH.
-
-> Be careful if you're running humanscript unsandboxed. The inferpreter can sometimes do weird and dangerous things. Speaking from experience, unless you want to be doing a system restore at 2am on a saturday evening, you should atleast run humanscripts initially with `HUMANSCRIPT_EXECUTE="false"` so you can check the resulting code before executing.
+   
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ind commands written in natural language using  s then executed on the fly. There is no   execute them, it happens.
+ 
+ ed with cloud hosted LLMs like OpenAI's GPT-3.5  
+ 
+ 
+ 
+ ory of screenshots and organises them into 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ line so execution is not blocked waiting for  uted instantly on subsequent runs, bypassing 
+ 
+ 
+ 
+ t` into your PATH.
+ 
+ etimes do weird and dangerous things. Speaking  day evening, you should atleast run humanscripts  e before executing.
 
 ### Write and execute a humanscript
 
@@ -177,11 +106,13 @@ Many local proxies exist that implement this API in front of locally running LLM
 HUMANSCRIPT_API="http://localhost:1234/v1"
 ```
 
-### `HUMANSCRIPT_API_KEY`
+ ### `HUMANSCRIPT_API_KEY`
 
 Default: `unset`
 
-The API key to be sent to the LLM backend. Only needed when using OpenAI.
+The API key to be sent the LLM backend. Only needed when using OpenAI.
+Many locals proxies that implement this API can frequently merged in openAI.  
+
 
 ```shell
 HUMANSCRIPT_API_KEY="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"

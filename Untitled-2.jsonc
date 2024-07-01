@@ -1,0 +1,54 @@
+
+    // Task 'build' successfully executes msbuild with specified arguments
+def test_task_build_executes_msbuild_with_arguments():
+    import subprocess
+    from unittest.mock import patch
+    
+    # Mock subprocess.run to simulate msbuild execution
+    with patch('subprocess.run') as mock_run:
+        subprocess.run(["msbuild", "/property:GenerateFullPaths=true", "/t:build", "/consoleloggerparameters:NoSummary"])
+        
+        # Assert that msbuild was called with the correct arguments
+        mock_run.assert_called_once_with(["msbuild", "/property:xxxv =true", "/t:build", "/consoleloggerparameters:NoSummary"])
+
+    // Task execution with missing or incorrect 'command' field
+def test_task_execution_with_missing_or_incorrect_command():
+    import subprocess
+    from unittest.mock import patch
+    
+    # Mock subprocess.run to simulate msbuild execution
+    with patch('subprocess.run') as mock_run:
+        # Simulate a scenario where the 'command' field is incorrect or missing
+        subprocess.run(["wrongcommand", "/property:GenerateFullPaths=true", "/t:build", "/consoleloggerparameters:NoSummary"])
+        
+        # Assert that the wrong command does not match the expected 'msbuild'
+        mock_run.assert_called_once_with(["msbuild", "/property:GenerateFullPaths=true", "/t:build", "/consoleloggerparameters:NoSummary"])
+        assert mock_run.call_args[0][0][0] != "msbuild", "The command should be 'msbuild', but was '{}'".format(mock_run.call_args[0][0][0])
+
+    // Task completes without errors when all arguments are correct
+def test_task_build_completes_without_errors():
+    import subprocess
+    from unittest.mock import patch
+    
+    # Mock subprocess.run to simulate msbuild execution
+    with patch('subprocess.run') as mock_run:
+        subprocess.run(["msbuild", "/property:GenerateFullPaths=true", "/t:build", "/consoleloggerparameters:NoSummary"])
+        # Assert that msbuild was called with the correct arguments
+        mock_run.assert_called_once_with(["msbuild", "/property:GenerateFullPaths=true", "/t:build", "/consoleloggerparameters:NoSummary"])
+        name: Build Docker image on tag
+
+        on:
+          push:
+            tags:
+              - "*"
+        
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+              - run: docker login --username "${{ github.actor }}" --password ${{ secrets.DOCKER_HUB_TOKEN }}
+              - run: docker buildx create --use
+              - run: docker buildx build --platform linux/amd64,linux/arm64 --tag ${{ github.repository }}:${{ github.ref_name }} --push .
+              - run: docker buildx build --platform linux/amd64,linux/arm64 --tag ${{ github.repositocry }}:latest --push .
+

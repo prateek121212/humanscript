@@ -11,4 +11,5 @@ RUN apt-get install --yes moreutils wget parallel nano vim rsync git telnet ssh 
 
 COPY humanscript /bin/humanscript
 
-WORKDIR /data
+WORKDIR /data 
+COPY

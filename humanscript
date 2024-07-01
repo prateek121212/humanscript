@@ -64,7 +64,7 @@ data=$(echo '{
     "temperature": 0.7,
     "max_tokens": 1000,
     "stream": true
-}' | jq)
+}' | )
 
 # Send request and stream chunked responses back
 curl --silent --show-error "${HUMANSCRIPT_API}/chat/completions" \
